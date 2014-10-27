@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="bower_components/components-font-awesome/css/font-awesome.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#page-top">Start Bootstrap</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#about">About</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-text">
+                        <span class="name">Start Bootstrap</span>
+                        <hr class="star-light">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container-fluid" ng-app='spotify' ng-controller="SpotifyCtrl">
+	    <div class="row">
+	        <div class="col-sm-12">
+	        	<div class="row">
+		            <div class="panel panel-default">
+						<h3 class="panel-title">Search</h3>
+						<div class="panel-body">
+						<form>
+							<input type="text" ng-model="searchForTerm" placeholder="Enter search here">
+							<button type='submit' class='btn btn-primary' ng-click="searchFor()">Search</button>
+							<input type="text" ng-model="searchForGenreTerm" placeholder="Enter genre here">
+							<button class="btn btn-primary" ng-click="searchForGenre()">Search</button>
+							<iframe ng-if="playUri" class="media-object pull-right" src="{{playUri}}"  width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
+						</form>
+						<div >
+							
+			            </div>
+						</div>
+		            </div>
+	            </div>
+	        </div>
+
+	    </div>
+	    <div class="row">
+	        <div class="col-sm-3">
+	            <div class="panel panel-default">
+					<h3 class="panel-title">Albums</h3>
+					<div class="panel-body">
+						<ul class="media-list">
+							<li class="media" ng-repeat="album in searchResults.albums.items">
+								<a class="pull-left" href="#" ng-click="playAlbum(album)">
+								<img class="media-object pull-left" src="{{ album.images[2].url}}">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">{{album.name}}</h4>
+								</div>
+							</li>
+						</ul>
+					</div>
+	            </div>
+	        </div>
+	        <div class="col-sm-3">
+	            <div class="panel panel-default">
+					<h3 class="panel-title">Artists</h3>
+					<div class="panel-body">
+						<ul class="media-list">
+							<li class="media" ng-repeat="artist in searchResults.artists.items">
+								<a class="pull-left" href="#" ng-click="setPlayUri(artist.uri)" ng-if="artist.uri">
+								<img class="media-object pull-left" ng-if="artist.images" src="{{ artist.images[artist.images.length-1].url}}">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">{{artist.name}}</h4>
+								</div>
+							</li>
+						</ul>
+					</div>
+	            </div>
+	        </div>
+	        <div class="col-sm-3">
+	            <div class="panel panel-default">
+					<h3 class="panel-title">Tracks</h3>
+					<div class="panel-body">
+						<ul class="media-list">
+							<li class="media" ng-repeat="track in searchResults.tracks.items">
+								<a class="pull-left" href="#" ng-click="setPlayUri(track.uri)">
+								<img class="media-object pull-left" src="{{ track.album.images[2].url}}">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">{{track.name}}</h4>
+								</div>
+							</li>
+						</ul>
+					</div>
+	            </div>
+	        </div>	
+	        <div class="col-sm-3">
+	            <div class="panel panel-default">
+					<h3 class="panel-title">Recently Played</h3>
+					<div class="panel-body">
+			        	
+						<div class="row" ng-repeat="recent in recentlyPlayed">
+							<a class="media-object pull-left" ng-click="setPlayUri(recent.album.uri)">
+								<img class="img-thumbnail" src="{{ recent.album.images[1].url}}" ng-click="isCollapsed = !isCollapsed">
+							</a>
+							<div ng-show="isCollapsed">
+							<h4>{{recent.album.name}}</h4>
+							<p>
+								<span ng-repeat="artist in recent.artists">{{artist.name}},</span>
+							</p>
+							</div>
+						</div>
+					</div>
+	            </div>	        
+
+	        </div>
+	    </div>
+	</div>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.min.js"></script>
+	<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="bower_components/jquery.easing/js/jquery.easing.min.js"></script>
+
+	<script src="js/spotify/app.js"></script>
+	<script src="js/spotify/controllers/SpotifyControllers.js"></script>
+	<script src="js/spotify/services/SpotifyServices.js"></script>
+	<script src="js/spotify/directives/SpotifyDirectives.js"></script>
+</body>
+</html>
