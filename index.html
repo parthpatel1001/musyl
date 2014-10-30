@@ -5,6 +5,12 @@
 	<link rel="stylesheet" type="text/css" href="bower_components/components-font-awesome/css/font-awesome.min.css">
 </head>
 <body>
+	<style>
+	.carousel-caption {
+	    top: 0;
+	    bottom: auto;
+	}
+	</style>
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
@@ -16,7 +22,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#page-top">Start Bootstrap</a>
+                <a class="navbar-brand" href="#page-top">Muysl</a>
+                <div class="col-sm-3 col-md-3 pull-right">
+				</div>                
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -53,104 +61,93 @@
                 </div>
             </div>
         </div>
-    </header>
-
+    </header>    
     <div class="container-fluid" ng-app='spotify' ng-controller="SpotifyCtrl">
-	    <div class="row">
-	        <div class="col-sm-12">
-	        	<div class="row">
-		            <div class="panel panel-default">
-						<h3 class="panel-title">Search</h3>
-						<div class="panel-body">
-						<form>
-							<input type="text" ng-model="searchForTerm" placeholder="Enter search here">
-							<button type='submit' class='btn btn-primary' ng-click="searchFor()">Search</button>
-							<input type="text" ng-model="searchForGenreTerm" placeholder="Enter genre here">
-							<button class="btn btn-primary" ng-click="searchForGenre()">Search</button>
-							<iframe ng-if="playUri" class="media-object pull-right" src="{{playUri}}"  width="300" height="80" frameborder="0" allowtransparency="true"></iframe>
-						</form>
-						<div >
-							
-			            </div>
-						</div>
-		            </div>
-	            </div>
-	        </div>
-
-	    </div>
-	    <div class="row">
-	        <div class="col-sm-3">
-	            <div class="panel panel-default">
-					<h3 class="panel-title">Albums</h3>
-					<div class="panel-body">
-						<ul class="media-list">
-							<li class="media" ng-repeat="album in searchResults.albums.items">
-								<a class="pull-left" href="#" ng-click="playAlbum(album)">
-								<img class="media-object pull-left" src="{{ album.images[2].url}}">
-								</a>
-								<div class="media-body">
-									<h4 class="media-heading">{{album.name}}</h4>
-								</div>
-							</li>
-						</ul>
-					</div>
-	            </div>
-	        </div>
-	        <div class="col-sm-3">
-	            <div class="panel panel-default">
-					<h3 class="panel-title">Artists</h3>
-					<div class="panel-body">
-						<ul class="media-list">
-							<li class="media" ng-repeat="artist in searchResults.artists.items">
-								<a class="pull-left" href="#" ng-click="setPlayUri(artist.uri)" ng-if="artist.uri">
-								<img class="media-object pull-left" ng-if="artist.images" src="{{ artist.images[artist.images.length-1].url}}">
-								</a>
-								<div class="media-body">
-									<h4 class="media-heading">{{artist.name}}</h4>
-								</div>
-							</li>
-						</ul>
-					</div>
-	            </div>
-	        </div>
-	        <div class="col-sm-3">
-	            <div class="panel panel-default">
-					<h3 class="panel-title">Tracks</h3>
-					<div class="panel-body">
-						<ul class="media-list">
-							<li class="media" ng-repeat="track in searchResults.tracks.items">
-								<a class="pull-left" href="#" ng-click="setPlayUri(track.uri)">
-								<img class="media-object pull-left" src="{{ track.album.images[2].url}}">
-								</a>
-								<div class="media-body">
-									<h4 class="media-heading">{{track.name}}</h4>
-								</div>
-							</li>
-						</ul>
-					</div>
-	            </div>
-	        </div>	
-	        <div class="col-sm-3">
-	            <div class="panel panel-default">
-					<h3 class="panel-title">Recently Played</h3>
-					<div class="panel-body">
-			        	
-						<div class="row" ng-repeat="recent in recentlyPlayed">
-							<a class="media-object pull-left" ng-click="setPlayUri(recent.album.uri)">
-								<img class="img-thumbnail" src="{{ recent.album.images[1].url}}" ng-click="isCollapsed = !isCollapsed">
-							</a>
-							<div ng-show="isCollapsed">
+    	<div class="row">
+    		<div class="col-sm-3">
+				<form class="form-inline">
+					<div class="form-group">
+						<input type="text" class="form-control" ng-model="searchForTerm" placeholder="Enter search here">
+						<button type='submit' class='btn btn-primary' ng-click="searchFor()">Search</button>
+						<input type="text" class="form-control" ng-model="searchForGenreTerm" placeholder="Enter genre here">
+						<button class="btn btn-primary" ng-click="searchForGenre()">Search</button>
+						<button class='btn btn-success' ng-click="expandPlayer()">Expand</button>
+					</div>		
+				</form>
+			</div>
+    	</div>
+    	<div class="row">
+    		<div class="col-sm-6">
+				<carousel>
+					<slide ng-repeat="recent in recentlyPlayed" active="recent.active">
+						<div class="carousel-caption">
 							<h4>{{recent.album.name}}</h4>
 							<p>
 								<span ng-repeat="artist in recent.artists">{{artist.name}},</span>
+								<iframe ng-if="playUri" class="media-object pull-right" src="{{playUri}}"  width="100%" height="{{playerHeight}}" frameborder="0" allowtransparency="true"></iframe>
 							</p>
-							</div>
 						</div>
-					</div>
-	            </div>	        
+						<img ng-src="{{ recent.album.images[0].url}}" style="margin:auto; width:100%">
 
-	        </div>
-	    </div>
+					</slide>    
+				</carousel>
+			</div>
+			<div class="col-sm-6">	
+				<div class="row">
+			        <div class="col-sm-4">
+			            <div class="panel panel-default">
+							<h3 class="panel-title">Albums</h3>
+							<div class="panel-body">
+								<ul class="media-list">
+									<li class="media" ng-repeat="album in searchResults.albums.items">
+										<a class="pull-left" href="#" ng-click="playAlbum(album)">
+										<img class="media-object pull-left" src="{{ album.images[2].url}}">
+										</a>
+										<div class="media-body">
+											<h4 class="media-heading">{{album.name}}</h4>
+										</div>
+									</li>
+								</ul>
+							</div>
+			            </div>
+			        </div>
+			        <div class="col-sm-4">
+			            <div class="panel panel-default">
+							<h3 class="panel-title">Artists</h3>
+							<div class="panel-body">
+								<ul class="media-list">
+									<li class="media" ng-repeat="artist in searchResults.artists.items">
+										<a class="pull-left" href="#" ng-click="setPlayUri(artist.uri)" ng-if="artist.uri">
+										<img class="media-object pull-left" ng-if="artist.images" src="{{ artist.images[artist.images.length-1].url}}">
+										</a>
+										<div class="media-body">
+											<h4 class="media-heading">{{artist.name}}</h4>
+										</div>
+									</li>
+								</ul>
+							</div>
+			            </div>
+			        </div>
+			        <div class="col-sm-4">
+			            <div class="panel panel-default">
+							<h3 class="panel-title">Tracks</h3>
+							<div class="panel-body">
+								<ul class="media-list">
+									<li class="media" ng-repeat="track in searchResults.tracks.items">
+										<a class="pull-left" href="#" ng-click="setPlayUri(track.uri)">
+										<img class="media-object pull-left" src="{{ track.album.images[2].url}}">
+										</a>
+										<div class="media-body">
+											<h4 class="media-heading">{{track.name}}</h4>
+										</div>
+									</li>
+								</ul>
+							</div>
+			            </div>
+			        </div>
+			    </div>				
+			</div>
+		</div>
 	</div>
 	<script src="bower_components/angular/angular.js"></script>
 	<script src="bower_components/angular-resource/angular-resource.min.js"></script>
