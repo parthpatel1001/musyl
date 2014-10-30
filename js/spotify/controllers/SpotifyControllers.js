@@ -56,10 +56,12 @@ angular.module('spotify.controllers',[])
 				// $scope.searchResults.artists = result.response
 			}
 		);
-	}
+	};
+
 	var setPlayUri = function(uri) {
 		$scope.playUri = $sce.trustAsResourceUrl('https://embed.spotify.com/?uri=' + uri);
-	}
+	};
+	
 	$scope.setPlayUri = setPlayUri;
 
 	$scope.playAlbum = function(album) {
@@ -71,6 +73,7 @@ angular.module('spotify.controllers',[])
 
 			Spotify.getArtists(artistIds).then(function(result) {
 				recent.artists = artistIds.length > 1 ? result.artists : [result];
+				recent.active = true;
 			});
 		});
 		if($scope.recentlyPlayed.length >=5 ) {
@@ -79,5 +82,9 @@ angular.module('spotify.controllers',[])
 		} else {
 			$scope.recentlyPlayed.unshift(recent);
 		}
+	};
+	$scope.playerHeight = 100;
+	$scope.expandPlayer = function() {
+		$scope.playerHeight = $scope.playerHeight == 100 ? 500 : 100;
 	}
 }]);
