@@ -1,4 +1,4 @@
 musyl
 =====
 
-Recommendation engine using Spotify Api
+Search through by genre on spotify through echonest api.
